@@ -1,0 +1,36 @@
+.pagina1 {
+  font-family: 'UnimedSlab-SemiBold';
+  font-size: 200%;
+}
+
+.table2 {
+  padding: 20px;
+  text-align: auto;
+  max-width: 100%;
+}
+
+.badge-success {
+  background-color: #00995d;
+}
+
+.badge-warning {
+  background-color: #ffc20f;
+}
+
+.size120 {
+  max-width: 120px;
+}
+
+.size50 {
+  max-width: 50px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #ea0f63;
+  border-color: #ea0f63;
+}
+
+.MuiDialog-paperWidthSm {
+  max-width: 800px;
+}
