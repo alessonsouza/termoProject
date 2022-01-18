@@ -9,7 +9,7 @@ Conexão banco => ORACLE.
 
 # login
 
-Para logar nesta aplicação basta utilzar o login do AD (mesmo login da sua máquina), que porventura é o mesmo login do Sistema Senior.
+Para logar nesta aplicação basta utilzar o login do AD (mesmo login da sua máquina),
 
 # termoRefeicoes
 

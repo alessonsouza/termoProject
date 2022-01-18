@@ -57,7 +57,7 @@ namespace TermoRefeicoes
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
             services.AddHttpContextAccessor();//permite o acesso de dados via token jwt, em qlqer lugar da aplicação (IHttpContextAccessor _httpContextAccessor;)
 
-            services.AddScoped<IUserSenior, UserSeniorService>();
+            services.AddScoped<IUserGeral, UserGeralService>();
             services.AddScoped<IRefeicoes, RefeicoesService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ITermo, TermoService>();
@@ -99,13 +99,13 @@ namespace TermoRefeicoes
                       c.SwaggerDoc("v1",
                   new OpenApiInfo
                   {
-                      Title = "API de integração com apliativos Portal Unimed",
+                      Title = "API de integração com apliativos",
                       Version = "v1",
-                      Description = "API de integração com o aplicativo do beneficiário do Portal Unimed",
+                      Description = "API de integração com o aplicativo",
                       Contact = new OpenApiContact
                       {
-                          Name = "Unimed Chapecó",
-                          Url = new Uri("https://www.unimedchapeco.coop.br")
+                          Name = "",
+                          Url = new Uri("")
                       }
                   });
                       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

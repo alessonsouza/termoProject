@@ -23,12 +23,7 @@ namespace termoRefeicoes.Services
         public async Task<IEnumerable<Setor>> GetAll()
         {
 
-            string sql = @"select CODCCU as id, NOMCCU as descricao
-                                from r018ccu
-                                where exists (select 1
-                                from r034fun
-                                where r034fun.codccu = r018ccu.codccu
-                                and r034fun.sitafa <> 7)";
+            string sql = @"select ";
 
             using (var conn = _connection.Connection())
             {

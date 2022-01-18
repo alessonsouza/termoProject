@@ -16,7 +16,7 @@ import SelectField from '../../../components/selectField';
 import TermosAPI from '../../../lib/api/termo';
 import SetorAPI from '../../../lib/api/setor';
 import './termosAceitos.css';
-import '../../../assets/css/unimed.css';
+import '../../../assets/css/colors.css';
 import { LoaderContext } from '../../../lib/context/loader-context';
 
 const Home = () => {
@@ -543,7 +543,7 @@ const Home = () => {
           <DialogActions>
             <button
               type="button"
-              className="btn btn-lg btn-success bg-verde-unimed"
+              className="btn btn-lg btn-success bg-verde-termo"
               onClick={() => AceitarTermo()}>
               Aceito!
             </button>

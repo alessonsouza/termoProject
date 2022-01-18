@@ -23,7 +23,7 @@ import RefeicoesAPI from '../../lib/api/refeicoes';
 import TermoAPI from '../../lib/api/termo';
 import TokenAPI from '../../lib/api/token';
 import './pagina1.css';
-import '../../assets/css/unimed.css';
+import '../../assets/css/colors.css';
 import Texto from '../../assets/text-term';
 import { AuthContext } from '../../lib/context/auth-context';
 
@@ -499,7 +499,6 @@ const Home = () => {
               </h6>
               <p>
                 <b>Ramal:</b> 1877 - <b>Email:</b>{' '}
-                consumosnd@unimedchapeco.coop.br
               </p>
             </div>
           ) : (
@@ -527,7 +526,7 @@ const Home = () => {
                 <div className="col-md-12 mt-2 text-center">
                   <button
                     type="button"
-                    className="btn btn-lg btn-success bg-verde-unimed"
+                    className="btn btn-lg btn-success bg-verde-termo"
                     onClick={() => setDialogTerm(true)}>
                     Aceitar termo de responsabilidade sobre os consumos!
                   </button>
@@ -553,7 +552,7 @@ const Home = () => {
               <DialogActions>
                 <button
                   type="button"
-                  className="btn btn-lg btn-success bg-verde-unimed"
+                  className="btn btn-lg btn-success bg-verde-termo"
                   onClick={() =>
                     ConfirmarConsumos(
                       dadosUser?.matricula || storage?.matricula,
@@ -613,7 +612,7 @@ const Home = () => {
           <DialogActions>
             <button
               type="button"
-              className="btn btn-lg btn-success bg-verde-unimed"
+              className="btn btn-lg btn-success bg-verde-termo"
               onClick={() => AceitarTermo()}>
               Concordo!
             </button>
