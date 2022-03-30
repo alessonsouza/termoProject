@@ -18,12 +18,12 @@ namespace termoRefeicoes.Services.Security
         protected User _user;
 
 
-        protected readonly IUserGeral _userGeralService;
+        protected readonly IUserSenior _userSeniorService;
 
-        public LdapAuthService(IOptions<LdapConfig> ldapConfig, IUserGeral userGeralService)
+        public LdapAuthService(IOptions<LdapConfig> ldapConfig, IUserSenior userSeniorService)
         {
             _config = ldapConfig.Value;
-            _userGeralService = userGeralService;
+            _userSeniorService = userSeniorService;
 
         }
 
@@ -57,8 +57,8 @@ namespace termoRefeicoes.Services.Security
             // }
 
             // string nameOfUser = GetUserFullName(username);            
-            var _userGeral = _userGeralService.GetUsers(username);
-            var matricula = _userGeral.Result.Where(index => index.NumCadastro != 0).Last();
+            var _userSenior = _userSeniorService.GetUsers(username);
+            var matricula = _userSenior.Result.Where(index => index.NumCadastro != 0).Last();
 
             _user = new User
             {

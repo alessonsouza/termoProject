@@ -7,6 +7,8 @@ import Loader from './components/loader';
 import Home from './pages/default';
 import TermosAceitos from './pages/reports/termos-aceitos';
 import ConsumosAceitos from './pages/reports/consumos-aceitos';
+import Lancamentos from './pages/reports/lancamentos';
+import Configs from './pages/configs';
 import Login from './pages/login';
 
 // const TermosAceitos = lazy(() => import('./pages/reports/termos-aceitos'));
@@ -29,7 +31,11 @@ const Rotas = () => {
           path="/relatorios/consumos"
           component={() => <ConsumosAceitos />}
         />
-
+        <PrivateRoute
+          path="/relatorios/lancamentos"
+          component={() => <Lancamentos />}
+        />
+        <PrivateRoute path="/configuracoes" component={() => <Configs />} />
         {/*
           <PrivateRoute path="/restrito" component={PaginaRestrita} />
         */}

@@ -3,6 +3,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import isBetween from 'dayjs/plugin/isBetween';
 
 import {
@@ -28,11 +30,13 @@ import SelectField from '../../../components/selectField';
 import ConsumosAPI from '../../../lib/api/consumos';
 import SetorAPI from '../../../lib/api/setor';
 import './consumosAceitos.css';
-import '../../../assets/css/colors.css';
+import '../../../assets/css/unimed.css';
 import { LoaderContext } from '../../../lib/context/loader-context';
 
 const Home = () => {
   dayjs.extend(isBetween);
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const mes = dayjs().format('MM');
   const ano = dayjs().format('YYYY');
   // const dayStart = dayjs().startOf('month').format('DD');
@@ -467,7 +471,7 @@ const Home = () => {
           <DialogActions>
             <button
               type="button"
-              className="btn btn-lg btn-success bg-verde-termo"
+              className="btn btn-lg btn-success bg-verde-unimed"
               onClick={() => AceitarTermo()}>
               Aceito!
             </button>

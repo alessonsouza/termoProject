@@ -26,7 +26,8 @@ namespace termoRefeicoes.Services
         public async Task<IEnumerable<TermoVersion>> GetTermo()
         {
 
-            string sql = @"SELECT * ";
+            string sql = @"SELECT * FROM USU_TVERACE 
+                           FETCH FIRST 1 ROWS ONLY";
 
             try
             {
@@ -49,7 +50,12 @@ namespace termoRefeicoes.Services
         {
             var user = _httpContextAccessor.HttpContext?.User;
             string userName = user.Identity.Name;
-            string sql = @"UPDATE :matricula";
+            string sql = @"UPDATE r070acc 
+                             set usu_datchk = :dataAtualizacao, usu_horchk = :horaAtualizacao
+                           where to_char(r070acc.datapu,'YYYYMMDD HH:mm') >= :dataInicio
+                             AND TO_CHAR(r070acc.datapu,'YYYYMMDD HH:mm') < :dataFim                              
+                             AND r070acc.codrlg    = 20
+                             AND r070acc.numcad    = :matricula";
             int quantidade = 0;
             string dataat = null;
             var obj = new

@@ -19,7 +19,12 @@
 //         <nav
 //           className={`${classNavBarOpen} navbar navbar-expand-lg navbar-light bg-verde-escuro`}
 //           style={{ height: '76px' }}>
-//
+//           <a className="navbar-brand" href="#1">
+//             <img
+//               alt="Unimed Chapecó"
+//               src="https://unimedchapeco.coop.br/assets/img/logo_110_51.png"
+//             />
+//           </a>
 //           <button
 //             className={`navbar-toggler ${classNavButton}`}
 //             type="button"
@@ -67,6 +72,12 @@ const Header = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-verde-escuro">
+      <a className="navbar-brand" href="#1">
+        <img
+          alt="Unimed Chapecó"
+          src="https://unimedchapeco.coop.br/assets/img/logo_110_51.png"
+        />
+      </a>
       <button
         className={`navbar-toggler ${classNavButton}`}
         type="button"

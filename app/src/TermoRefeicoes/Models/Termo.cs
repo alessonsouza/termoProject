@@ -8,6 +8,7 @@ namespace termoRefeicoes.Models
         public int ID { get; set; }
         public int NUMCAD { get; set; }
         public DateTime DATA_ACEITE { get; set; }
+        public string DATA_ACEITE_CHAR { get; set; }
         public int HORA_ACEITE { get; set; }
         public string TERMO_DESCRICAO { get; set; }
         public string NOMFUN { get; set; }

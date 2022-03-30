@@ -262,6 +262,11 @@ namespace termoRefeicoes.Services.Report
 
             sql += filterCLause;
             sql += " ORDER BY cc.nomccu asc";
+            if (!jAHACEITOU)
+            {
+
+                sql += " ,termo_descricao desc";
+            }
             Console.WriteLine(sql);
             using (var conn = _connection.Connection())
             {
@@ -302,15 +307,18 @@ namespace termoRefeicoes.Services.Report
             //                     fetch first row only";
 
 
-            string sql = @" SELECT 
-                            MIN (TO_CHAR(acc.datapu, 'MM/YY')) as datatT                                                    
+            string sql = @" select TO_CHAR(datatT, 'MM/YY')as datatT from (
+            SELECT MIN(acc.datapu) as datatT               
                             FROM r034fun  fun
-                            JOIN r018CCU  cc
+                            left JOIN r018CCU  cc
                             ON ( cc.codccu = fun.codccu )
-                            join r070acc acc on (fun.numemp = acc.numemp
+                            left join r070acc acc on (fun.numemp = acc.numemp
                                             AND fun.tipcol = acc.tipcol
                                             AND fun.numcad = acc.numcad )
-                            where acc.usu_datchk IS NULL and  fun.SITAFA <> 7 ORDER BY FUN.NUMCAD";
+                            where acc.usu_datchk IS NULL 
+                            and  fun.SITAFA <> 7 
+                            and to_char(acc.datapu, 'DDMMYYYY') <> '31121900'  
+                             ORDER BY FUN.NUMCAD)";
             // var param = new DynamicParameters();
             // param.Add(":matricula", matricula);
 
@@ -523,6 +531,11 @@ namespace termoRefeicoes.Services.Report
 
             sql += filterCLause;
             sql += " ORDER BY cc.nomccu asc";
+            if (!jAHACEITOU)
+            {
+
+                sql += " ,termo_descricao desc";
+            }
 
             using (var conn = _connection.Connection())
             {

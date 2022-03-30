@@ -162,7 +162,8 @@ namespace termoRefeicoes.Services.Report
             if (String.IsNullOrEmpty(filtros.JAHACEITOU.Trim()) || filtros.JAHACEITOU == "aceitos")
             {
                 sql = @"SELECT ter.usu_numcad as numcad, 
-                                ter.usu_dtacei as data_aceite, 
+                               ter.usu_dtacei as data_aceite, 
+                               to_char(ter.usu_dtacei,'DD/MM/YYYY') as data_aceite_char,
                                 ter.usu_hracei as hora_aceite, 
                                 tv.usu_dester as termo_descricao,
                                 fun.nomfun,

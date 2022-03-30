@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Microsoft.Extensions.FileProviders;
+using TermoRefeicoes.Services.ConfigService;
 
 namespace TermoRefeicoes
 {
@@ -57,13 +58,15 @@ namespace TermoRefeicoes
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
             services.AddHttpContextAccessor();//permite o acesso de dados via token jwt, em qlqer lugar da aplicação (IHttpContextAccessor _httpContextAccessor;)
 
-            services.AddScoped<IUserGeral, UserGeralService>();
+            services.AddScoped<IUserSenior, UserSeniorService>();
             services.AddScoped<IRefeicoes, RefeicoesService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ITermo, TermoService>();
             services.AddScoped<ITermosAceitosReport, TermosAceitosService>();
             services.AddScoped<IConsumosAceitosReport, ConsumosAceitosService>();
+            services.AddScoped<ILancamentosReport, LancamentosService>();
             services.AddScoped<ISetor, SetorService>();
+            services.AddScoped<IConfigService, ConfigService>();
 
             services.AddCors();
 
@@ -99,13 +102,13 @@ namespace TermoRefeicoes
                       c.SwaggerDoc("v1",
                   new OpenApiInfo
                   {
-                      Title = "API de integração com apliativos",
+                      Title = "API de integração com apliativos Portal Unimed",
                       Version = "v1",
-                      Description = "API de integração com o aplicativo",
+                      Description = "API de integração com o aplicativo do beneficiário do Portal Unimed",
                       Contact = new OpenApiContact
                       {
-                          Name = "",
-                          Url = new Uri("")
+                          Name = "Unimed Chapecó",
+                          Url = new Uri("https://www.unimedchapeco.coop.br")
                       }
                   });
                       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

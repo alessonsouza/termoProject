@@ -16,7 +16,9 @@ const Menu = () => {
   const RemoveStorage = () => {
     TokenAPI.removeToken();
   };
-  let menu = false;
+  let relatoriosRH = false;
+  let relatoriosNutri = false;
+  let ShowRelatorios = false;
 
   groups?.map((e) => {
     if (
@@ -25,13 +27,24 @@ const Menu = () => {
       e.groupName === 'SW_TI' ||
       e.groupName === 'G_TI'
     ) {
-      menu = true;
+      relatoriosRH = true;
+    }
+    if (
+      e.groupName === 'G_NUTRICAO' ||
+      e.groupName === 'SW_NUTRICAO' ||
+      e.groupName === 'SW_TI' ||
+      e.groupName === 'G_TI'
+    ) {
+      relatoriosNutri = true;
     }
   });
 
+  if (relatoriosNutri || relatoriosRH) {
+    ShowRelatorios = true;
+  }
   return (
     <>
-      {menu && (
+      {ShowRelatorios && (
         <>
           <div
             className="col-md-3 navbar-nav"
@@ -42,10 +55,34 @@ const Menu = () => {
             className="col-md-3 navbar-nav"
             style={{ justifyContent: 'flex-end' }}>
             <DropDown descricao="Relatórios">
-              <Divider />
-              <DropDownItem descricao="Termos" link="/relatorios/termos" />
-              <Divider />
-              <DropDownItem descricao=" Consumos" link="/relatorios/consumos" />
+              {relatoriosRH && (
+                <>
+                  {' '}
+                  <Divider />
+                  <DropDownItem descricao="Termos" link="/relatorios/termos" />
+                  <Divider />
+                  <DropDownItem
+                    descricao=" Consumos"
+                    link="/relatorios/consumos"
+                  />
+                  <Divider />{' '}
+                </>
+              )}
+              {relatoriosNutri && (
+                <>
+                  <DropDownItem
+                    descricao=" Lançamentos"
+                    link="/relatorios/lancamentos"
+                  />
+                  <Divider />{' '}
+                </>
+              )}
+              {relatoriosNutri && (
+                <DropDownItem
+                  descricao=" Configurações"
+                  link="/configuracoes"
+                />
+              )}
             </DropDown>
           </div>
         </>

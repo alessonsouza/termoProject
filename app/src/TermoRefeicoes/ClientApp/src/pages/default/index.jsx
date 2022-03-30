@@ -22,8 +22,9 @@ import { Box, BoxTitle } from '../../components/box-card';
 import RefeicoesAPI from '../../lib/api/refeicoes';
 import TermoAPI from '../../lib/api/termo';
 import TokenAPI from '../../lib/api/token';
+import ConfigAPI from '../../lib/api/configs';
 import './pagina1.css';
-import '../../assets/css/colors.css';
+import '../../assets/css/unimed.css';
 import Texto from '../../assets/text-term';
 import { AuthContext } from '../../lib/context/auth-context';
 
@@ -49,6 +50,8 @@ const Home = () => {
   const [termoDesc, setTermoDesc] = useState(null);
   const [messageTerm, setMessageTerm] = useState('');
   const [typeMessageTerm, setTypeMessageTerm] = useState('');
+  const [diaInicio, setDiaInicio] = useState(1);
+  const [diaFim, setDiaFim] = useState(1);
   const vertical = 'bottom';
   const horizontal = 'center';
   console.log(Texto);
@@ -74,9 +77,10 @@ const Home = () => {
     setTypeAction(type);
     setMes(dateMes);
     setAno(dateAno);
+    return dateMes;
   };
 
-  const FormatarHora = (valor) => {
+  const FormatarHora = async (valor) => {
     const hora = valor.substr(0, 2);
     let min = valor.substr(3, 4);
     const dh = hora * 60;
@@ -100,7 +104,7 @@ const Home = () => {
 
   const ConfirmarConsumos = async (matricula, competencia) => {
     const hora = await FormatarHora(
-      dayjs().tz('America/Sao_Paulo').format('HH:mm'),
+      dayjs.utc().tz('America/Sao_Paulo').local().format('HH:mm'),
     );
     const resp = await RefeicoesAPI.confirmarConsumos(
       matricula,
@@ -112,8 +116,18 @@ const Home = () => {
     }
   };
 
+  const getConfig = async () => {
+    const dias = await ConfigAPI.getConfigs();
+
+    if (dias.data) {
+      setDiaInicio(dias.data.diaInicio);
+      setDiaFim(dias.data.diaFim);
+    }
+  };
+
   const GetTermo = async () => {
     const resp = await TermoAPI.getTermo();
+
     if (resp?.data) {
       setTermoDesc(resp.data.data[0]);
       console.log(termoDesc);
@@ -125,7 +139,7 @@ const Home = () => {
 
     const data = {};
     const hora = await FormatarHora(
-      dayjs().tz('America/Sao_Paulo').format('HH:mm'),
+      dayjs.utc().tz('America/Sao_Paulo').local().format('HH:mm'),
     );
     data.NUMCAD = dadosUser?.matricula || storage?.matricula;
     data.HORA_ACEITE = hora;
@@ -384,8 +398,8 @@ const Home = () => {
   };
 
   const CanAcceptTerm = () => {
-    const begin = `${ano}-${mes.toString().padStart(2, '0')}-26`;
-    const end = `${ano}-${mes.toString().padStart(2, '0')}-31`;
+    const begin = `${ano}-${mes.toString().padStart(2, '0')}-${diaInicio}`;
+    const end = `${ano}-${mes.toString().padStart(2, '0')}-${diaFim}`;
     const result = dayjs(day).isBetween(dayjs(begin), dayjs(end), null, '[)');
     setCanNotAccept(result);
   };
@@ -394,7 +408,7 @@ const Home = () => {
 
   useEffect(() => {
     Refeicoes(ano + mes.toString().padStart(2, '0'));
-
+    getConfig();
     // CheckAcceptedTerm();
     CanAcceptTerm();
   }, [mes, ano, success]);
@@ -403,9 +417,11 @@ const Home = () => {
     const dia = dayjs().tz('America/Sao_Paulo').format('DD');
     if (dia >= 27) {
       let nextMonth = parseInt(mes, 10);
-      nextMonth += 1;
+      // nextMonth += 1;
+      nextMonth = GetDate('next');
       Refeicoes(ano + nextMonth.toString().padStart(2, '0'));
       setMes(nextMonth.toString().padStart(2, '0'));
+      getConfig();
     }
   }, []);
 
@@ -424,14 +440,21 @@ const Home = () => {
     if (parseInt(mes, 10) === mesAtual && hoje <= 25) {
       return true;
     }
-    if (parseInt(mes, 10) === mesAtual && hoje >= 27) {
+    if (
+      parseInt(mes, 10) === mesAtual &&
+      hoje >= 27 &&
+      dados?.data?.length > 0
+    ) {
       return false;
     }
 
     if (parseInt(mes, 10) === mesAtual && parseInt(ano, 10) >= anoAtual) {
       return true;
     }
-    if (parseInt(mes, 10) > mesAtual && hoje >= 27) {
+    if (parseInt(mes, 10) > mesAtual && hoje >= 27 && ano === anoAtual) {
+      return true;
+    }
+    if (parseInt(mes, 10) < mesAtual && hoje >= 27 && ano > anoAtual) {
       return true;
     }
     return false;
@@ -499,6 +522,7 @@ const Home = () => {
               </h6>
               <p>
                 <b>Ramal:</b> 1877 - <b>Email:</b>{' '}
+                consumosnd@unimedchapeco.coop.br
               </p>
             </div>
           ) : (
@@ -526,7 +550,7 @@ const Home = () => {
                 <div className="col-md-12 mt-2 text-center">
                   <button
                     type="button"
-                    className="btn btn-lg btn-success bg-verde-termo"
+                    className="btn btn-lg btn-success bg-verde-unimed"
                     onClick={() => setDialogTerm(true)}>
                     Aceitar termo de responsabilidade sobre os consumos!
                   </button>
@@ -552,7 +576,7 @@ const Home = () => {
               <DialogActions>
                 <button
                   type="button"
-                  className="btn btn-lg btn-success bg-verde-termo"
+                  className="btn btn-lg btn-success bg-verde-unimed"
                   onClick={() =>
                     ConfirmarConsumos(
                       dadosUser?.matricula || storage?.matricula,
@@ -612,7 +636,7 @@ const Home = () => {
           <DialogActions>
             <button
               type="button"
-              className="btn btn-lg btn-success bg-verde-termo"
+              className="btn btn-lg btn-success bg-verde-unimed"
               onClick={() => AceitarTermo()}>
               Concordo!
             </button>

@@ -34,7 +34,33 @@ namespace termoRefeicoes.Services
             var dataInicio = CompetenciaHelper.GetStartDate(competencia);
 
 
-            string sql = @"SELECT ";
+            string sql = @"SELECT trf.codref              AS CodRefeicao,
+                                    fun.numcad              AS NumCadastro,
+                                    upper(trf.desref)       AS DescRefeicao,
+                                    acc.datacc             DataRef,
+                                    acc.horacc,
+                                    acc.qtdacc,
+                                    acc.valref              ValorRef,
+                                    acc.usu_datchk,
+                                    acc.usu_horchk
+                                FROM r070acc acc
+                                JOIN r034fun  fun
+                                    ON ( fun.numemp = acc.numemp
+                                AND fun.tipcol = acc.tipcol
+                                AND fun.numcad = acc.numcad )
+                                JOIN r068trf  trf
+                                    ON trf.codref = acc.codref 
+                                AND trf.numemp = acc.numemp
+                              WHERE to_char(acc.datapu,'YYYYMMDD HH:mm') >= :dataInicio
+                                AND TO_CHAR(acc.datapu, 'YYYYMMDD HH:mm') < :dataFim                              
+
+                                AND acc.codrlg    = 20
+                                AND fun.numcad    = ( SELECT r034usu.numcad
+                                                        FROM r999usu
+                                                        JOIN r034usu
+                                                            ON ( r034usu.codusu = r999usu.codusu )
+                                                        WHERE lower(r999usu.nomusu) = lower(:username)
+                                                    )";
 
             var param = new DynamicParameters();
             param.Add(":dataInicio", dataInicio);
@@ -61,14 +87,31 @@ namespace termoRefeicoes.Services
             string userName = user.Identity.Name;
             var dataFim = CompetenciaHelper.GetEndDate(competencia); //"25/04/2021";
             var dataInicio = CompetenciaHelper.GetStartDate(competencia);
-            string sql = @"SELECT count()
-                               ";
+            string sql = @"SELECT count(acc.codref)
+                                FROM r070acc acc
+                                JOIN r034fun  fun
+                                    ON ( fun.numemp = acc.numemp
+                                AND fun.tipcol = acc.tipcol
+                                AND fun.numcad = acc.numcad )
+                                JOIN r068trf  trf
+                                    ON trf.codref = acc.codref 
+                                AND trf.numemp = acc.numemp
+                              WHERE to_char(acc.datapu,'YYYYMMDD HH:mm') >= :dataInicio
+                                AND TO_CHAR(acc.datapu, 'YYYYMMDD HH:mm') < :dataFim                              
+                                AND acc.usu_datchk is null
+                                AND acc.codrlg    = 20
+                                AND fun.numcad    = ( SELECT r034usu.numcad
+                                                        FROM r999usu
+                                                        JOIN r034usu
+                                                            ON ( r034usu.codusu = r999usu.codusu )
+                                                        WHERE lower(r999usu.nomusu) = lower(:username)
+                                                    )";
 
             var param = new DynamicParameters();
             param.Add(":dataInicio", dataInicio);
             param.Add(":dataFim", dataFim);
             param.Add(":username", userName);
-
+            Console.WriteLine(sql);
             using (var conn = _connection.Connection())
             {
                 try
@@ -87,7 +130,9 @@ namespace termoRefeicoes.Services
         {
 
             var res = 0;
-            string sql = @"SELECT  ";
+            string sql = @"SELECT  count(*) as id
+                                FROM USU_TTERMAC                               
+                              WHERE usu_numcad = :matricula";
 
             var param = new DynamicParameters();
             param.Add(":matricula", matricula);
@@ -113,8 +158,10 @@ namespace termoRefeicoes.Services
         {
 
             int res = 0;
-            string sql = @" INSERT INTO ";
-            // string sql = @"INSERT INTO";
+            string sql = @" INSERT INTO USU_TTERMAC(USU_CODTER, USU_CODVER, USU_NUMCAD, USU_DTACEI, USU_HRACEI, USU_HASHID)            
+                            VALUES(SEQ_USU_TTERMAC.nextval, :FK_TERMO, :NUMCAD, :DATA_ACEITE, :HORA_ACEITE, :TERMO_DESCRICAO)";
+            // string sql = @"INSERT INTO USU_TVERACE (USU_CODVER, USU_VERSAO, USU_DESTER, USU_DATCRI)
+            //                 VALUES(1, :NUMCAD, :TERMO_DESCRICAO,  :DATA_ACEITE)";
             using (var conn = _connection.Connection())
             {
                 try
@@ -179,7 +226,16 @@ namespace termoRefeicoes.Services
         {
 
 
-            string sql = @"SELECT ";
+            string sql = @"SELECT to_char(acc.datacc,'YYYY-MM-DD') DataRef                               
+                                FROM r070acc acc
+                                JOIN r034fun  fun
+                                    ON ( fun.numemp = acc.numemp
+                                AND fun.tipcol = acc.tipcol
+                                AND fun.numcad = acc.numcad )                               
+                              WHERE acc.codrlg    = 20
+                                AND fun.numcad    = :matricula
+                                order by acc.datacc  asc
+                                fetch first row only";
 
             var param = new DynamicParameters();
             param.Add(":matricula", matricula);

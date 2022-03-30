@@ -2,6 +2,8 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState, useContext } from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import isBetween from 'dayjs/plugin/isBetween';
 import ReactPaginate from 'react-paginate';
 
@@ -16,12 +18,13 @@ import SelectField from '../../../components/selectField';
 import TermosAPI from '../../../lib/api/termo';
 import SetorAPI from '../../../lib/api/setor';
 import './termosAceitos.css';
-import '../../../assets/css/colors.css';
+import '../../../assets/css/unimed.css';
 import { LoaderContext } from '../../../lib/context/loader-context';
 
 const Home = () => {
   dayjs.extend(isBetween);
-
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   // const mes = dayjs().format('MM');
   // const ano = dayjs().format('YYYY');
   const [dados, setDados] = useState([]);
@@ -162,15 +165,15 @@ const Home = () => {
       data.DATA_INICIO =
         filtros?.dataInicio === 'Invalid Date'
           ? ' '
-          : dayjs(filtros?.dataInicio).format('YYYY') +
-            dayjs(filtros?.dataInicio).format('MM') +
-            dayjs(filtros?.dataInicio).format('DD');
+          : dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('YYYY') +
+            dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('MM') +
+            dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('DD');
       data.DATA_FIM =
         filtros?.dataFim === 'Invalid Date'
           ? ' '
-          : dayjs(filtros?.dataFim).format('YYYY') +
-            dayjs(filtros?.dataFim).format('MM') +
-            dayjs(filtros?.dataFim).format('DD');
+          : dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('YYYY') +
+            dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('MM') +
+            dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('DD');
     } else {
       data.DATA_INICIO = ' ';
       data.DATA_FIM = ' ';
@@ -217,15 +220,15 @@ const Home = () => {
       data.DATA_INICIO =
         filtros?.dataInicio === 'Invalid Date'
           ? ' '
-          : dayjs(filtros?.dataInicio).format('YYYY') +
-            dayjs(filtros?.dataInicio).format('MM') +
-            dayjs(filtros?.dataInicio).format('DD');
+          : dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('YYYY') +
+            dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('MM') +
+            dayjs(filtros?.dataInicio).tz('America/Sao_Paulo').format('DD');
       data.DATA_FIM =
         filtros?.dataFim === 'Invalid Date'
           ? ' '
-          : dayjs(filtros?.dataFim).format('YYYY') +
-            dayjs(filtros?.dataFim).format('MM') +
-            dayjs(filtros?.dataFim).format('DD');
+          : dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('YYYY') +
+            dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('MM') +
+            dayjs(filtros?.dataFim).tz('America/Sao_Paulo').format('DD');
     } else {
       data.DATA_INICIO = ' ';
       data.DATA_FIM = ' ';
@@ -400,7 +403,9 @@ const Home = () => {
 
         dadosUsers.data =
           items.datA_ACEITE && year !== 1901
-            ? dayjs(items?.datA_ACEITE).format('DD/MM/YYYY')
+            ? dayjs(items?.datA_ACEITE)
+                .tz('America/Sao_Paulo')
+                .format('DD/MM/YYYY')
             : '';
 
         return (
@@ -415,7 +420,9 @@ const Home = () => {
             <td>{items.nomfun}</td>
             <td>
               {items.datA_ACEITE && year !== 1901
-                ? dayjs(items?.datA_ACEITE).format('DD/MM/YYYY')
+                ? dayjs(items?.datA_ACEITE)
+                    .tz('America/Sao_Paulo')
+                    .format('DD/MM/YYYY')
                 : ''}{' '}
               {items.horA_ACEITE > 0 ? FormataHora(items.horA_ACEITE) : ''}
             </td>
@@ -543,7 +550,7 @@ const Home = () => {
           <DialogActions>
             <button
               type="button"
-              className="btn btn-lg btn-success bg-verde-termo"
+              className="btn btn-lg btn-success bg-verde-unimed"
               onClick={() => AceitarTermo()}>
               Aceito!
             </button>
